@@ -1,54 +1,49 @@
+# azure-batch-ilastik
+Running Ilastik on Azure Batch
 
-# 1. Create a deployment script deploy_script.sh
-wget https://shipyarddata.blob.core.windows.net/drosophila/pixelClassification.ilp
-wget http://files.ilastik.org/ilastik-1.2.2-Linux.tar.bz2
-tar xjf ilastik-1.*-Linux.tar.bz2
-unzip drosophila.zip
 
-# 2. Create a JSON file with declarations to drosophila.zip and deployment script 
-# 3. create drosophila.zip file with pixelClassification.ilp and run_task.sh
-# 4. Upload drosophila.zip and *.h5 file to blob storage
-az storage blob upload -f drosophila.zip --account-name shipyarddata --account-key O3SgBchy4x4Ms1UDDpSpeHVy+G9Ah2IWanRHppyJaQoUG3aPOTP9q+AcW0YfyZA/KEtyYnsLjQEG5yk9PYZilQ== -c drosophila --name drosophila.zip
+# Preparation steps. Executed just once.
 
-az storage blob upload -f deploy_script.sh --account-name shipyarddata --account-key O3SgBchy4x4Ms1UDDpSpeHVy+G9Ah2IWanRHppyJaQoUG3aPOTP9q+AcW0YfyZA/KEtyYnsLjQEG5yk9PYZilQ== -c drosophila --name deploy_script.sh
+##Uploading input files
+az storage blob upload -c drosophila -f ./deploy_script.sh deploy_script.sh --account-name shippyard --account-key longpassword==
 
-#5. Create a pool
-az batch pool create --account-name matlabb --account-endpoint https://matlabb.westeurope.batch.azure.com --id ilastik --image "Canonical:UbuntuServer:16.04.0-LTS" --node-agent-sku-id "batch.node.ubuntu 16.04"  --vm-size Standard_D11 --verbose
+## Create a batch service
+az batch account create -g demorg -n matlabb --location westeurope
+az batch account show -g demorg -n matlabb 
 
-#6. Assign a json to a pool
+## Create a pool
+az batch pool create --account-name matlabb --account-endpoint https://matlabb.westeurope.batch.azure.com --id ilastik --image "Canonical:UbuntuServer:16.04.0-LTS" --node-agent-sku-id "batch.node.ubuntu 16.04"  --vm-size Standard_A4 --verbose
+ 
+## Set the json file
+### The app will be installed in /mnt/batch/tasks/shared  
  az batch pool set --pool-id ilastik --json-file pool-shipyard.json --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb
 
-#7. Resize a pool
-az batch pool resize --pool-id ilastik --target-dedicated 2 --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb
-
-OR 
-az batch pool resize --pool-id ilastik0 --target-dedicated 0 --target-low-priority-nodes 2  --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb
-
-#8. Create a job and create tasks by running 02.run_job.sh from Azure CLI
-
-# Execution script
-wget https://shipyarddata.blob.core.windows.net/drosophila/drosophila_00-49_9.h5
-cd ilastik-1.*-Linux
-./run_ilastik.sh --headless --project=../pixelClassification.ilp ../drosophila_00-49_9.h5 --export_source="Simple Segmentation" --output_filename_format="../out/{nickname}{slice_index}.tiff" --output_format="multipage tiff sequence" > log.out
-
-# copy files to  blob storage
-#run multicopy.sh
-
-# create run_job : create a loop with a set of tasks that call run_task.sh from the command line
-#run_task.sh is a part of a zip file with the app
-# create run_task.sh that downloads input file from blob storage and executes run_ilastik 
  
- # Remove the job
- az batch job delete  --job-id ilastikjob-1504088397  --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb --yes
+## Resize the pool
+az batch pool resize --pool-id ilastik --target-dedicated 2 --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb 
 
- # We can check the status of the pool to see when it has finished resizing.
-az batch pool show --pool-id ilastik  --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb
+## Execute the 02.run_job.sh script to create a job and tasks
+## Execute the 03.download_output.sh script to download the results
 
-# List the compute nodes running in a pool.
-az batch node list --pool-id ilastik --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb -o table
+## Delete the pool after the calculations are finished
+az batch pool delete --pool-id ilastik -y 
 
- # List remote login connectoin
-az batch node remote-login-settings show --pool-id ilastik --node-id tvm-3550856927_1-20170904t111707z --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb -o table
+# TROUBLESHOOTING
 
-#Create the admin user
-az batch node user create --is-admin --name adminuser --password Azure@123456 --pool-id ilastik --node-id tvm-3550856927_1-20170904t111707z --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb
+If a particular node in the pool is having issues, it can be rebooted or reimaged.
+The ID of the node can be retrieved with the list command below.
+A typical node ID will be in the format 'tvm-xxxxxxxxxx_1-<timestamp>'.
+
+Example:
+az batch node reboot --pool-id ilastik --node-id tvm-123_1-20170316t000000z --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb
+
+Alternatively, you may want to login to the node and troubleshoot as a local admin user.
+
+## List the compute nodes running in a pool and select the node you want to log in to.
+az batch node list --pool-id ilastik --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb
+
+## List remote login connectoin
+az batch node remote-login-settings show --pool-id ilastik --node-id tvm-xxxxxxxxxx_1-<timestamp> --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb -o table
+
+## Create the admin user
+az batch node user create --is-admin --name adminuser --password Azure@123456 --pool-id ilastik --node-id tvm-xxxxxxxxxx_1-<timestamp> --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb
