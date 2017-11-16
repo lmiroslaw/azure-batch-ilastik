@@ -31,7 +31,7 @@ az batch pool create --account-name matlabb --account-endpoint https://matlabb.w
 az batch pool set --pool-id ilastik --json-file pool-shipyard.json --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb
 ```
 
-6. Resize a pool
+6. Resize a pool. This is the moment when the VMs are provisioned and the deploy_script.sh executes on each machine.
 ```
 az batch pool resize --pool-id ilastik --target-dedicated 2 --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb
 ```
@@ -41,9 +41,17 @@ Steps 4-6 are also implemented in:
 01.redeploy.sh ilastik
 ```
 
-7. Create a job and tasks by running [02.run_job.sh](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/02.run_job.sh) from Azure CLI. Each task analyzes one .h5 file.
+## Execution Phase
+
+7. Create a job and k tasks by running [02.run_job.sh](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/02.run_job.sh) from Azure CLI. Each task calls [run_task.sh](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/run_task.sh) that in turns analyzes a single .h5 file.
 ```
-02.run_job.sh
+az batch job create --id $JOBID --pool-id ilastik --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb 
+for k in {1..2} 
+  do 
+    echo "starting task_$k ..."
+    az batch task create --job-id $JOBID --task-id "task_$k" --command-line "/mnt/batch/tasks/shared/run_task.sh $k > out.log" --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb
+  done
+
 ```
 
 8. Once the calculation is ready download the results to your local machine by:
@@ -56,7 +64,9 @@ Steps 4-6 are also implemented in:
 These set of commands will help to deal with problems during the execution.
 
 Run the script and create the admin user on the first node
-> 04.diagnose.sh mypassword
+```
+04.diagnose.sh mypassword
+```
 
 * Remove the job
 > az batch job delete  --job-id ilastikjob-1504088397  --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb --yes

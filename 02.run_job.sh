@@ -2,7 +2,7 @@
 
 JOBID=`date +%Y-%m-%d_%H_%M`
 #echo 'creating job $JOBID...'
-az batch job create --id $JOBID --pool-id ilastik --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb # 
+az batch job create --id $JOBID --pool-id ilastik --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb 
 for k in {1..2} 
   do 
     echo "starting task_$k ..."
