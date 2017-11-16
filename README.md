@@ -22,22 +22,34 @@ Following preparation steps must be executed.
 ```
 
 4. Create a pool named 'ilastik'
->az batch pool create --account-name matlabb --account-endpoint https://matlabb.westeurope.batch.azure.com --id ilastik --image "Canonical:UbuntuServer:16.04.0-LTS" --node-agent-sku-id "batch.node.ubuntu 16.04"  --vm-size Standard_D11 --verbose
+```
+az batch pool create --account-name matlabb --account-endpoint https://matlabb.westeurope.batch.azure.com --id ilastik --image "Canonical:UbuntuServer:16.04.0-LTS" --node-agent-sku-id "batch.node.ubuntu 16.04"  --vm-size Standard_D11 --verbose
+```
 
 5. Assign a json to a pool
->az batch pool set --pool-id ilastik --json-file pool-shipyard.json --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb
+```
+az batch pool set --pool-id ilastik --json-file pool-shipyard.json --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb
+```
 
 6. Resize a pool
->az batch pool resize --pool-id ilastik --target-dedicated 2 --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb
-
+```
+az batch pool resize --pool-id ilastik --target-dedicated 2 --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb
+```
 Steps 4-6 are also implemented in:  
-> 01.redeploy.sh ilastik
+
+```
+01.redeploy.sh ilastik
+```
 
 7. Create a job and tasks by running [02.run_job.sh](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/02.run_job.sh) from Azure CLI. Each task analyzes one .h5 file.
-> 02.run_job.sh
+```
+02.run_job.sh
+```
 
 8. Once the calculation is ready download the results to your local machine by:
-> 03.download_results.sh
+```
+03.download_results.sh
+```
 
 ## Troubleshooting
 
