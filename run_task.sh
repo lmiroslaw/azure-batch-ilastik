@@ -11,10 +11,16 @@ filenamein=drosophila_00-49
 cd $( dirname "${BASH_SOURCE[0]}" )
 echo Downloading ${filenamein}_$1
 wget https://shipyarddata.blob.core.windows.net/drosophila/${filenamein}_$1.h5
-cp ${filenamein}_$1.h5 ${filenamein}$1.h5
-chown $USER -R ilastik-1.*-Linux
+
+# Problem: pixelClassification.ilp seems to be hardcoded because it accepts only the original filename (=drosophila_00-49)
+cp ${filenamein}_$1.h5 ${filenamein}.h5
+#chown $USER -R ilastik-1.*-Linux
+echo Running ilastik ...
 cd ilastik-1.*-Linux
-./run_ilastik.sh --headless --project=../pixelClassification.ilp ../${filenamein}$1.h5 --export_source="Simple Segmentation" --output_filename_format="../out/{nickname}{slice_index}.tiff" --output_format="multipage tiff sequence"
+./run_ilastik.sh --headless --project=../pixelClassification.ilp ../${filenamein}.h5 --export_source="Simple Segmentation" --output_filename_format="../out/{nickname}{slice_index}.tiff" --output_format="multipage tiff sequence"
 
 cp ../out/*.tiff $AZ_BATCH_TASK_WORKING_DIR
 cp log.out $AZ_BATCH_TASK_WORKING_DIR
+
+#Saving to: 'drosophila_00-49_1.h5'
+#ERROR: Could not find data at ../drosophila_00-49.h5

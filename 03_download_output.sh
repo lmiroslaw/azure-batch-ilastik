@@ -1,15 +1,18 @@
 #!/bin/bash
 
-JOBID=2017-11-14_14_52_02
-#filename=drosophila_00-4900.tiff
-filename=drosophila_00-490
+JOBID=$1
+filename=drosophila_00-49
 
-#for j in {1..2}; do
-	for k in {1..3}; do
-	  echo "Downloading ${k} tiff results..."
-	  az batch task file download --job-id $JOBID --task-id task_${k} --file-path wd/${filename}${k}.tiff --destination ~/ilastikresults/${filename} --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb
+for k in {1..2}; do
+	for j in {0..9}; do
+	  echo "Downloading ${filename}0${j}.tiff from task_${k} ..."
+	  az batch task file download --job-id $JOBID --task-id task_${k} --file-path wd/${filename}0${j}.tiff --destination ~/ilastikresults/${k}/${filename}0${j}.tiff --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb
 	 done
-#done	 
+	for j in {10..49}; do
+	  echo "Downloading ${filename}${j}.tiff from task_${k} ..."
+	  az batch task file download --job-id $JOBID --task-id task_${k} --file-path wd/${filename}${j}.tiff --destination ~/ilastikresults/${k}/${filename}${j}.tiff --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb
+	 done
+done	 
 echo "done."
 
 #AZ_BATCH_NODE_SHARED_DIR

@@ -6,7 +6,6 @@
 apt-get install -y unzip 
 # Retrieve the runtask 
 tar xf runme.tar -C $AZ_BATCH_NODE_SHARED_DIR
-#unzip drosophila.zip -d $AZ_BATCH_NODE_SHARED_DIR
 
 # Retrieve Ilastik
 wget http://files.ilastik.org/ilastik-1.2.2-Linux.tar.bz2 -P $AZ_BATCH_NODE_SHARED_DIR

@@ -44,3 +44,6 @@ These set of commands will help to deal with problems during the execution.
 
 * Create the admin user
 > az batch node user create --is-admin --name adminuser --password Azure@123456 --pool-id ilastik --node-id tvm-3550856927_1-20170904t111707z --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb
+
+* Remove the pool
+> az batch pool delete --pool-id ilastik  --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb
