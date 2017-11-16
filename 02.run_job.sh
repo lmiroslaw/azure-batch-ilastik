@@ -1,8 +1,5 @@
 #!/bin/bash
 
-prefix=ilastikjob
-#suffix=$("date+%s")  # The "+%s" option to 'date' is GNU-specific.
-#JOBID=$prefix_$suffix
 JOBID=`date +%Y-%m-%d_%H_%M`
 #echo 'creating job $JOBID...'
 az batch job create --id $JOBID --pool-id ilastik --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb # 

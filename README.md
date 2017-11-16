@@ -1,18 +1,21 @@
-This project shows how to deploy Ilastik software with Azure Batch.
+This project shows how to deploy [Ilastik](http://ilastik.org/download.html) software with Azure Batch.
+In this project [Drosophila 3D+t](http://data.ilastik.org/drosophila.zip) data set from [Hufnagel Grup, EMBL Heidelberg](http://www.embl.de/research/units/cbb/hufnagel/) is used. 
+We assume this data set has been copied to Azure Blob Storage.
 
 ## Preparation phase
 
 Following preparation steps must be executed.
 
-1. Create a deployment script deploy_script.sh
+1. Create a deployment script [deploy_script.sh](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/deploy_script.sh)
 
 2. Create a JSON file with declarations to dependencies and deployment script 
-3. Compress and upload a tar ball with  pixelClassification.ilp and run_task.sh to the Blob storage
+3. Compress and upload a tar ball with  pixelClassification.ilp and run_task.sh to the Blob storage (see 00.Upload.sh)
 
->az storage blob upload -f drosophila.zip --account-name shipyarddata --account-key longkey== -c drosophila --name drosophila.zip
+>tar -cf runme.tar pixelClassification.ilp run_task.sh
+>az storage blob upload -f runme.tar --account-name shipyarddata --account-key longkey== -c drosophila --name drosophila.zip
 >az storage blob upload -f deploy_script.sh --account-name shipyarddata --account-key longkey== -c drosophila --name deploy_script.sh
 
-4. Create a pool
+4. Create a pool named 'ilastik'
 >az batch pool create --account-name matlabb --account-endpoint https://matlabb.westeurope.batch.azure.com --id ilastik --image "Canonical:UbuntuServer:16.04.0-LTS" --node-agent-sku-id "batch.node.ubuntu 16.04"  --vm-size Standard_D11 --verbose
 
 5. Assign a json to a pool
@@ -21,10 +24,11 @@ Following preparation steps must be executed.
 6. Resize a pool
 >az batch pool resize --pool-id ilastik --target-dedicated 2 --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb
 
-OR 
->az batch pool resize --pool-id ilastik0 --target-dedicated 0 --target-low-priority-nodes 2  --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb
+OR execute 
+> 01.redeploy.sh ilastik
 
-8. Create a job and create tasks by running 02.run_job.sh from Azure CLI
+7. Create a job and tasks by running 02.run_job.sh from Azure CLI. Each task analyzes one .h5 file.
+> 02.run_job.sh
 
 ## Troubleshooting
 
