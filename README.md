@@ -13,7 +13,7 @@ Following preparation steps must be executed.
 1. Create a deployment script [deploy_script.sh](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/deploy_script.sh)
 
 2. Create a [JSON file](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/pool-shipyard.json) with declarations of the compressed dependencies and the deployment script 
-3. Compress and upload a tar ball with  pixelClassification.ilp and run_task.sh to the Blob storage (see [00.Upload.sh](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/00.Upload.sh))
+3. Compress and upload a tar ball with  pixelClassification.ilp and [run_task.sh](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/run_task.sh) to the Blob storage (see [00.Upload.sh](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/00.Upload.sh))
 
 ```bash
  tar -cf runme.tar pixelClassification.ilp run_task.sh
