@@ -25,7 +25,9 @@ The logic included in a separate runme.tar file and the input data are uploaded 
 
 ```
 for k in {1..2}
+do
 az storage blob upload -f drosophila_00-49.h5 --account-name shipyarddata --account-key longkey== -c drosophila --name drosophila_00-49_$k.h5
+done
 ```
 
 4. Create a pool named 'ilastik' in the existing batch account
