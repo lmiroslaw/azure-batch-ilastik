@@ -9,6 +9,9 @@ cd ..
 echo "Uploading deployment script"
 az storage blob upload -f deploy_script.sh --account-name shipyarddata --account-key longkey== -c drosophila --name deploy_script.sh
 
-echo "Uploading the input file"
-az storage blob upload -f drosophila_00-49.h5 --account-name shipyarddata --account-key longkey== -c drosophila --name drosophila_00-49.h5
+for k in {1..2} 
+  do
+    echo "Uploading the $k input file"
+    az storage blob upload -f drosophila_00-49.h5 --account-name shipyarddata --account-key longkey== -c drosophila --name drosophila_00-49_$k.h5
+  done
 
