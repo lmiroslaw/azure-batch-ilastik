@@ -23,4 +23,4 @@ cp ../out/*.tiff $AZ_BATCH_TASK_WORKING_DIR
 cp log.out $AZ_BATCH_TASK_WORKING_DIR
 
 #Saving to: 'drosophila_00-49_1.h5'
-#ERROR: Could not find data at ../drosophila_00-49.h5
+#Atention: the ilp file expects the file name drosophila_00-49.h5. That is why the file name is updated.
