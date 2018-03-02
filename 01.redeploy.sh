@@ -12,5 +12,5 @@ az batch pool set --pool-id ${poolid} --json-file pool-shipyard.json --account-e
 az batch pool resize --pool-id ${poolid} --target-dedicated 2 --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb
 
 # Remove the old pool if necessary
-# az batch pool delete --pool-id ilastik  --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb
+# az batch pool delete --pool-id ${poolid}  --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb
 
