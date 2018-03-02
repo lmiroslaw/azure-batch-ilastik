@@ -22,6 +22,7 @@ Following preparation steps must be executed.
  az storage blob upload -f deploy_script.sh --account-name shipyarddata --account-key longkey== -c drosophila --name deploy_script.sh
  az storage blob upload -f drosophila_00-49.h5 --account-name shipyarddata --account-key longkey== -c drosophila --name drosophila_00-49.h5 
 ```
+The logic included in a separate runme.tar file and the input data are uploaded separately. The example includes a single input file .h5 that is downloaded to every VM in a cluster for the analysis. In reality there would be more input files.  
 
 4. Create a pool named 'ilastik' in the existing batch account
 ```
