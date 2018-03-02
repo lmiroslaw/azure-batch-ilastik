@@ -20,9 +20,13 @@ Following preparation steps must be executed.
  tar -cf runme.tar pixelClassification.ilp run_task.sh
  az storage blob upload -f runme.tar --account-name shipyarddata --account-key longkey== -c drosophila --name runme.tar
  az storage blob upload -f deploy_script.sh --account-name shipyarddata --account-key longkey== -c drosophila --name deploy_script.sh
- az storage blob upload -f drosophila_00-49.h5 --account-name shipyarddata --account-key longkey== -c drosophila --name drosophila_00-49.h5 
 ```
-The logic included in a separate runme.tar file and the input data are uploaded separately. The example includes a single input file .h5 that is downloaded to every VM in a cluster for the analysis. In reality there would be more input files.  
+The logic included in a separate runme.tar file and the input data are uploaded separately. The example includes a single input file .h5 that is uploaded multiple times. This way we can simulate real scenario with multiple input files: 
+
+```
+for k in {1..2}
+az storage blob upload -f drosophila_00-49.h5 --account-name shipyarddata --account-key longkey== -c drosophila --name drosophila_00-49_$k.h5
+```
 
 4. Create a pool named 'ilastik' in the existing batch account
 ```
