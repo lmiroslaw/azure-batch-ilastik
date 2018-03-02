@@ -3,10 +3,15 @@
 JOBID=`date +%Y-%m-%d_%H_%M`
 poolid=$1
 #echo 'creating job $JOBID... in pool $poolid'
-az batch job create --id $JOBID --pool-id ${poolid} --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb 
+export GROUPID=demorg
+export BATCHID=matlabb
+az batch account login -g $GROUPID -n $BATCHID
+
+echo 'creating job $JOBID...'
+az batch job create --id $JOBID --pool-id $poolid  
 for k in {1..2} 
   do 
     echo "starting task_$k ..."
-    az batch task create --job-id $JOBID --task-id "task_$k" --command-line "/mnt/batch/tasks/shared/run_task.sh $k > out.log" --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb
+    az batch task create --job-id $JOBID --task-id "task_$k" --command-line "/mnt/batch/tasks/shared/run_task.sh $k > out.log" 
   done
 echo "DONE. JOBID=${JOBID} executed."
