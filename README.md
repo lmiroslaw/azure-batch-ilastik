@@ -1,6 +1,7 @@
 This project shows how to deploy [Ilastik](http://ilastik.org/download.html) software with Azure Batch.
 In this project [Drosophila 3D+t](http://data.ilastik.org/drosophila.zip) data set from [Hufnagel Grup, EMBL Heidelberg](http://www.embl.de/research/units/cbb/hufnagel/) is used. 
-We assume this data set has been copied to Azure Blob Storage.
+You can download the data as follows:
+> wget http://data.ilastik.org/drosophila.zip
 
 To show the scaling possibilities we have created a multiple copies of the drosophila_00-49.h5 file. Each task analyzes one copy of the file as follows:
 
@@ -19,6 +20,7 @@ Following preparation steps must be executed.
  tar -cf runme.tar pixelClassification.ilp run_task.sh
  az storage blob upload -f runme.tar --account-name shipyarddata --account-key longkey== -c drosophila --name runme.tar
  az storage blob upload -f deploy_script.sh --account-name shipyarddata --account-key longkey== -c drosophila --name deploy_script.sh
+ az storage blob upload -f drosophila_00-49.h5 --account-name shipyarddata --account-key longkey== -c drosophila --name drosophila_00-49.h5 
 ```
 
 4. Create a pool named 'ilastik' in the existing batch account
