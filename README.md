@@ -69,11 +69,11 @@ for k in {1..2}
 ```
 03.download_results.sh $jobid
 ```
-where $jobid identifies the job. You can find out this parameter while running 02.run_job.sh.
+where $jobid identifies the job. You can find out this parameter while running 02.run_job.sh, from Azure Portal or from BatchLabs.
 
 ## Troubleshooting
 
-These set of commands will help to deal with problems during the execution.
+We encourage to use [BatchLabs](https://github.com/Azure/BatchLabs) for monitoring purposes. In addition, these set of commands will help to deal with problems during the execution.
 
 Run the script and create the admin user on the first node
 ```
@@ -89,7 +89,7 @@ Run the script and create the admin user on the first node
 * List the compute nodes running in a pool.
 > az batch node list --pool-id $poolid --account-endpoint $batchep --account-name $batchid -o table
 
-* List remote login connections for a specific node, for example tvm-3550856927_1-20170904t111707z 
+* List remote login connections for a specific node, for example *tvm-3550856927_1-20170904t111707z* 
 > az batch node remote-login-settings show --pool-id ilastik --node-id tvm-3550856927_1-20170904t111707z --account-endpoint $batchep --account-name $batchid -o table
 
 * Remove the pool
