@@ -29,34 +29,40 @@ az storage blob upload -f drosophila_00-49.h5 --account-name shipyarddata --acco
  done
 ```
 
-4. Edit the script, provide missing Batch Account Name, poolid and execute the script [01.redeploy.sh](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/01.redeploy.sh) as follows:
+4. Edit the script and provide missing Batch Account Name, poolid and execute the script [01.redeploy.sh](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/01.redeploy.sh) as follows:
 ```
 ./01.redeploy.sh ilastik
 ```
 where 'ilastik' is the pool name.  The script creates the pool:
 ```
-export GROUPID=demorg
-export BATCHID=matlabb
+poolid=ilastik
+GROUPID=demorg
+BATCHID=matlabb
 az batch account login -g $GROUPID -n $BATCHID
 
-az batch pool create --id ilastik --image "Canonical:UbuntuServer:16.04.0-LTS" --node-agent-sku-id "batch.node.ubuntu 16.04"  --vm-size Standard_D11 --verbose
+az batch pool create --id $poolid --image "Canonical:UbuntuServer:16.04.0-LTS" --node-agent-sku-id "batch.node.ubuntu 16.04"  --vm-size Standard_D11 --verbose
 ```
 
 assigns a json to a pool
 ```
-az batch pool set --pool-id ilastik --json-file pool-shipyard.json 
+az batch pool set --pool-id $poolid --json-file pool-shipyard.json 
 ```
 
 and resizes the pool. This is the moment when the VMs are provisioned and the deploy_script.sh executes on each machine.
 ```
-az batch pool resize --pool-id ilastik --target-dedicated 2 
+az batch pool resize --pool-id $poolid --target-dedicated 2 
 ```
 
 ## Execution Phase
 
-5. Create a job and k tasks by running [02.run_job.sh](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/02.run_job.sh) from Azure CLI. Each task calls [run_task.sh](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/run_task.sh) that in turns analyzes a single .h5 file.
+5. Edit the script and provide missing data and execute the script [02.run_job.sh](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/02.run_job.sh) as follows:
 ```
-az batch job create --id $JOBID --pool-id ilastik 
+./02.run_job.sh ilastik
+```
+
+The scripts creates a job and $k=2$ tasks on a pool called *ilastik*. Each task calls [run_task.sh](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/run_task.sh) that in turns analyzes a single .h5 file.
+```
+az batch job create --id $JOBID --pool-id $poolid 
 for k in {1..2} 
   do 
     echo "starting task_$k ..."
