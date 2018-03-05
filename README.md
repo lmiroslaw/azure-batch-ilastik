@@ -3,7 +3,7 @@ In this project [Drosophila 3D+t](http://data.ilastik.org/drosophila.zip) data s
 You can download the data as follows:
 > wget http://data.ilastik.org/drosophila.zip
 
-Once downloaded extract the files and identify pixelClassification.ilp file with the algorithm as well as the input image drosophila_00-49.h5. To show the scaling possibilities we have created a multiple copies of the drosophila_00-49.h5. Each task analyzes one copy of the image on a separate VM by executing:
+Once downloaded extract the files and identify *pixelClassification.ilp* file with the algorithm as well as the input image *drosophila_00-49.h5*. To show the scaling possibilities we have created a multiple copies of the *drosophila_00-49.h5*. Each task analyzes one copy of the image on a separate VM by executing:
 
 > ./run_ilastik.sh --headless --project=pixelClassification.ilp drosophila_00-49.h5 --export_source="Simple Segmentation" --output_filename_format="../out/{nickname}{slice_index}.tiff" --output_format="multipage tiff sequence"
 
@@ -75,7 +75,7 @@ for k in {1..2}
 ```
 03.download_results.sh $jobid
 ```
-where $jobid identifies the job. You can find out this parameter while running 02.run_job.sh, from Azure Portal or from BatchLabs.
+where $jobid identifies the job. You can find out this parameter while running [02.run_job.sh](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/02.run_job.sh), from Azure Portal or from BatchLabs.
 
 ## Troubleshooting
 
@@ -101,6 +101,7 @@ Run the script and create the admin user on the first node
 * Remove the pool
 > az batch pool delete --pool-id $poolid  --account-endpoint $batchep --account-name $batchid
 
+### Acknowledgement
 
 Data courtesy of Lars Hufnagel, EMBL Heidelberg
 
