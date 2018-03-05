@@ -3,7 +3,7 @@ In this project [Drosophila 3D+t](http://data.ilastik.org/drosophila.zip) data s
 You can download the data as follows:
 > wget http://data.ilastik.org/drosophila.zip
 
-To show the scaling possibilities we have created a multiple copies of the drosophila_00-49.h5 file. Each task analyzes one copy of the file as follows:
+Once downloaded extract the files and identify pixelClassification.ilp file with the algorithm as well as the input image drosophila_00-49.h5. To show the scaling possibilities we have created a multiple copies of the drosophila_00-49.h5. Each task analyzes one copy of the image on a separate VM by executing:
 
 > ./run_ilastik.sh --headless --project=pixelClassification.ilp drosophila_00-49.h5 --export_source="Simple Segmentation" --output_filename_format="../out/{nickname}{slice_index}.tiff" --output_format="multipage tiff sequence"
 
