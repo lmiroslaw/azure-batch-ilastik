@@ -11,10 +11,9 @@ Once downloaded extract the files and identify pixelClassification.ilp file with
 
 Following preparation steps must be executed.
 
-1. Create a deployment script [deploy_script.sh](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/deploy_script.sh)
-
-2. Create a [JSON file](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/pool-shipyard.json) with declarations of the compressed dependencies and the deployment script 
-3. Compress and upload a tar ball with  pixelClassification.ilp and [run_task.sh](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/run_task.sh) to the Blob storage (see [00.Upload.sh](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/00.Upload.sh))
+1. Prepare the deployment script [deploy_script.sh](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/deploy_script.sh)
+2. Prepare the [JSON file](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/pool-shipyard.json) with declarations of the compressed dependencies and the deployment script 
+3. Compress and upload a tar ball with the pixelClassification.ilp and [run_task.sh](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/run_task.sh) to the Blob storage by executing [00.Upload.sh](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/00.Upload.sh).
 
 ```bash
  tar -cf runme.tar pixelClassification.ilp run_task.sh
@@ -30,7 +29,11 @@ az storage blob upload -f drosophila_00-49.h5 --account-name shipyarddata --acco
 done
 ```
 
-4. Create a pool named 'ilastik' in the existing batch account
+4. Edit the script, provide missing Batch Account Name, poolid and execute the script [01.redeploy.sh](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/01.redeploy.sh) as follows:
+```
+./01.redeploy.sh ilastik
+```
+where 'ilastik' is the pool name.  The script creates the pool:
 ```
 export GROUPID=demorg
 export BATCHID=matlabb
@@ -39,24 +42,19 @@ az batch account login -g $GROUPID -n $BATCHID
 az batch pool create --id ilastik --image "Canonical:UbuntuServer:16.04.0-LTS" --node-agent-sku-id "batch.node.ubuntu 16.04"  --vm-size Standard_D11 --verbose
 ```
 
-5. Assign a json to a pool
+assigns a json to a pool
 ```
 az batch pool set --pool-id ilastik --json-file pool-shipyard.json 
 ```
 
-6. Resize a pool. This is the moment when the VMs are provisioned and the deploy_script.sh executes on each machine.
+and resizes the pool. This is the moment when the VMs are provisioned and the deploy_script.sh executes on each machine.
 ```
 az batch pool resize --pool-id ilastik --target-dedicated 2 
-```
-Steps 4-6 are also implemented in:  
-
-```
-01.redeploy.sh ilastik
 ```
 
 ## Execution Phase
 
-7. Create a job and k tasks by running [02.run_job.sh](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/02.run_job.sh) from Azure CLI. Each task calls [run_task.sh](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/run_task.sh) that in turns analyzes a single .h5 file.
+5. Create a job and k tasks by running [02.run_job.sh](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/02.run_job.sh) from Azure CLI. Each task calls [run_task.sh](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/run_task.sh) that in turns analyzes a single .h5 file.
 ```
 az batch job create --id $JOBID --pool-id ilastik 
 for k in {1..2} 
@@ -67,7 +65,7 @@ for k in {1..2}
 
 ```
 
-8. Once the calculation is ready download the results to your local machine by:
+6. Once the calculation is ready download the results to your local machine by:
 ```
 03.download_results.sh
 ```
