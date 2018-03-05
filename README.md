@@ -26,7 +26,7 @@ The logic included in a separate runme.tar file and the input data are uploaded 
 for k in {1..2}
 do
 az storage blob upload -f drosophila_00-49.h5 --account-name shipyarddata --account-key longkey== -c drosophila --name drosophila_00-49_$k.h5
-done
+ done
 ```
 
 4. Edit the script, provide missing Batch Account Name, poolid and execute the script [01.redeploy.sh](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/01.redeploy.sh) as follows:
@@ -67,8 +67,9 @@ for k in {1..2}
 
 6. Once the calculation is ready download the results to your local machine by:
 ```
-03.download_results.sh
+03.download_results.sh $jobid
 ```
+where $jobid identifies the job. You can find out this parameter while running 02.run_job.sh.
 
 ## Troubleshooting
 
@@ -80,19 +81,19 @@ Run the script and create the admin user on the first node
 ```
 
 * Remove the job
-> az batch job delete  --job-id ilastikjob-1504088397  --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb --yes
+> az batch job delete  --job-id $jobid  --account-endpoint $batchep --account-name $batchid --yes
 
 * We can check the status of the pool to see when it has finished resizing.
-> az batch pool show --pool-id ilastik  --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb
+> az batch pool show --pool-id $poolid  --account-endpoint $batchep --account-name $batchid
 
 * List the compute nodes running in a pool.
-> az batch node list --pool-id ilastik --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb -o table
+> az batch node list --pool-id $poolid --account-endpoint $batchep --account-name $batchid -o table
 
-* List remote login connectoin
-> az batch node remote-login-settings show --pool-id ilastik --node-id tvm-3550856927_1-20170904t111707z --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb -o table
+* List remote login connections for a specific node, for example tvm-3550856927_1-20170904t111707z 
+> az batch node remote-login-settings show --pool-id ilastik --node-id tvm-3550856927_1-20170904t111707z --account-endpoint $batchep --account-name $batchid -o table
 
 * Remove the pool
-> az batch pool delete --pool-id ilastik  --account-endpoint https://matlabb.westeurope.batch.azure.com --account-name matlabb
+> az batch pool delete --pool-id $poolid  --account-endpoint $batchep --account-name $batchid
 
 
 Data courtesy of Lars Hufnagel, EMBL Heidelberg
