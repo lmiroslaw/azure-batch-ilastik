@@ -3,8 +3,8 @@
 JOBID=`date +%Y-%m-%d_%H_%M`
 poolid=$1
 #echo 'creating job $JOBID... in pool $poolid'
-export GROUPID=demorg
-export BATCHID=matlabb
+GROUPID=
+BATCHID=
 az batch account login -g $GROUPID -n $BATCHID
 
 echo 'creating job $JOBID...'
