@@ -9,7 +9,7 @@ Once downloaded extract the files and identify *pixelClassification.ilp* file wi
 
 ## Preparation phase
 
-Following preparation steps must be executed.
+We are assuming you already created the Storage Account as well as the Batch Account using Azure Portal or Azure CLI. Following preparation steps must be executed.
 
 1. Update the deployment script [deploy_script.sh](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/deploy_script.sh)
 2. Update the [JSON file](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/pool-shipyard.json) with the reference to the  dependencies and the deployment script. Update the container name in the *blobSource* tag. 
