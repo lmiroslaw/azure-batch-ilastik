@@ -106,6 +106,8 @@ Run the script and create the admin user on the first node
  az group create -n tilastik -l westeurope
  az storage account create -n ilastiksstorage -l westeurope -g tilastik
 ```
+* Get the connection string for the Azure Storage
+> az storage account show-connection-string -n ilastiksstorage -g tilastik
 
 * Create the azure batch service
 > az batch account create -n bilastik -g tilastik
