@@ -9,7 +9,7 @@ Once downloaded extract the files and identify *pixelClassification.ilp* file wi
 
 ## Preparation phase
 
-We are assuming you already created the Storage Account as well as the Batch Account using Azure Portal or Azure CLI. Following preparation steps must be executed.
+We are assuming you already created the Storage Account as well as the Batch Account using Azure Portal or Azure CLI (see the Troubleshooting section). Following preparation steps must be executed.
 
 1. Update the deployment script [deploy_script.sh](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/deploy_script.sh)
 2. Update the [JSON file](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/pool-shipyard.json) with the reference to the  dependencies and the deployment script. Update the container name in the *blobSource* tag. 
@@ -100,6 +100,15 @@ Run the script and create the admin user on the first node
 
 * Remove the pool
 > az batch pool delete --pool-id $poolid  --account-endpoint $batchep --account-name $batchid
+
+* Create the resource group and storage account. For example:
+ ```
+ az group create -n tilastik -l westeurope
+ az storage account create -n ilastiksstorage -l westeurope -g tilastik
+```
+
+* Create the azure batch service
+> az batch account create -n bilastik -g tilastik
 
 ### Acknowledgement
 
