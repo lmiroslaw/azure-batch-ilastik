@@ -83,6 +83,8 @@ for k in {1..2}
 ```
 where $jobid identifies the job. You can find out this parameter while running [02.run_job.sh](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/02.run_job.sh), from Azure Portal or from BatchLabs.
 
+You can visualize the results in ImageJ, FiJI or any image processing software.
+
 ## Troubleshooting
 
 We encourage to use [BatchLabs](https://github.com/Azure/BatchLabs) for monitoring purposes. In addition, these set of commands will help to deal with problems during the execution.
