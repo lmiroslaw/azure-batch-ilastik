@@ -5,6 +5,10 @@ Many times the biologists or image processing specialists want to focus on the a
 
 This project shows how to deploy [Ilastik](http://ilastik.org/download.html) software, but other image processing tools such as ImageJ, FiJI, Cell Profiler, could be easily used as well, provided they have the command line interface. 
 
+These are the result of the processing. The detected cells are depicted in green. Original images are depicted in gray.
+
+![After processing](https://github.com/lmiroslaw/azure-batch-ilastik/blob/master/resources/demoSmall.gif)
+
 ## Ilastik on Azure
 In this project [Drosophila 3D+t](http://data.ilastik.org/drosophila.zip) data set from [Hufnagel Grup, EMBL Heidelberg](http://www.embl.de/research/units/cbb/hufnagel/) is used. You can download the input images as follows:
 > wget http://data.ilastik.org/drosophila.zip
