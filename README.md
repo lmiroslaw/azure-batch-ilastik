@@ -1,6 +1,6 @@
 ## Motivation
 
-The purpose of this project is to demonstrate the possibility of running image processing software using Azure Batch. 
+The purpose of this project is to demonstrate the possibility of running image processing software for microscopy using Azure Batch. 
 Many times the biologists or image processing specialists want to focus on the algorithm, instead of scalability, underlying hardware infrastructure and high availability. [Azure Batch service](https://docs.microsoft.com/en-us/azure/batch/batch-technical-overview) creates and manages a pool of compute nodes (virtual machines), installs the applications you want to run, and schedules jobs to run on the nodes. There is no cluster or job scheduler software to install, manage, or scale. Instead, you use [Batch APIs and tools](https://docs.microsoft.com/en-us/azure/batch/batch-apis-tools), command-line scripts, or the Azure portal to configure, manage, and monitor your jobs.
 
 This project shows how to deploy [Ilastik](http://ilastik.org/download.html) software, but other image processing tools such as [ImageJ](https://imagej.nih.gov/ij/), [Fiji](https://fiji.sc), [Cell Profiler](http://cellprofiler.org), could be easily used as well, provided they have the command line interface. 
